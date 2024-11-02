@@ -1,5 +1,9 @@
 #include "shader.h"
 
+Shader::Shader()
+{
+}
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	// Recover Shaders Strings from Files
