@@ -37,7 +37,7 @@ void Grid::UpdatePreview()
 
 void Grid::Build()
 {
-	if (mCanBuild)
+	if (mIsOpen && mCanBuild)
 	{
 		std::cout << "build" << std::endl;
 		mCubesPositions->push_back(glm::vec3(mGridChunk.x + mChunkSize / 2, 0, mGridChunk.y + mChunkSize / 2));
