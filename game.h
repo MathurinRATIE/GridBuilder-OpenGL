@@ -8,6 +8,7 @@
 #include "shader.h"
 #include "camera.h"
 #include "constant.h"
+#include "grid.h"
 
 class Game
 {
@@ -19,13 +20,14 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
+	Grid* mGrid;
+
 private:
 	Shader* mMainShader;
 	Camera* mCamera;
-	std::vector<glm::vec3> cubePositions;
-
-	unsigned int VAO;
-	unsigned int VBO;
+	std::vector<glm::vec3> mCubesPositions;
+	unsigned int mVAO;
+	unsigned int mVBO;
 	unsigned int mTexture1;
 };
 

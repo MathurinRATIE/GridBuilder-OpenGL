@@ -109,6 +109,14 @@ void Application::ProcessInput(GLFWwindow* window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    // Grid
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+        meGame->mGrid->Open();
+    if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+        meGame->mGrid->Close();
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+        meGame->mGrid->Build();
 }
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)

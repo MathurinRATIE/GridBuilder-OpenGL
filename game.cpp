@@ -10,8 +10,8 @@ Game::Game(Shader* mainShader, Camera *camera)
 
 Game::~Game()
 {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &mVAO);
+    glDeleteBuffers(1, &mVBO);
 }
 
 void Game::Init()
@@ -63,7 +63,7 @@ void Game::Init()
     };
 
     // Cubes Positions
-    cubePositions = {
+    mCubesPositions = {
     glm::vec3(0.0f,  0.0f,  0.0f),
     glm::vec3(2.0f,  5.0f, -15.0f),
     glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -77,12 +77,12 @@ void Game::Init()
     };
 
     // Create Vertex Array Object
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    glGenVertexArrays(1, &mVAO);
+    glBindVertexArray(mVAO);
 
     // Create Vertex Buffer Object
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenBuffers(1, &mVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // position attibute
@@ -129,6 +129,9 @@ void Game::Init()
 
     mMainShader->use();
     mMainShader->setInt("texture1", 0);
+
+    // init grid
+    mGrid = new Grid(mCamera, &mCubesPositions);
 }
 
 void Game::Update(float deltaTime)
@@ -150,17 +153,33 @@ void Game::Update(float deltaTime)
     //mainShader.setMat4("model", model);
     mMainShader->setMat4("view", view);
     mMainShader->setMat4("projection", projection);
+    mMainShader->setVec3("color", glm::vec3(1.0f, 1.0f, 1.0f));
 
     // Draw Texture
-    glBindVertexArray(VAO);
-    for (unsigned int i = 0; i < 10; i++)
+    glBindVertexArray(mVAO);
+    for (unsigned int i = 0; i < mCubesPositions.size(); i++)
     {
         // Model Matrix : Local Space --> World Space
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePositions[i]);
-        float angle = 20.0f * i;
-        model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
+        model = glm::translate(model, mCubesPositions[i]);
+        //float angle = 20.0f * i;
+        //model = glm::rotate(model, glm::radians(angle), glm::vec3(0.5f, 1.0f, 0.0f));
         mMainShader->setMat4("model", model);
+
+        if (mGrid->IsOpen() && i == mCubesPositions.size() - 1)
+        {
+            mGrid->GetPointedGridChunk();
+            mGrid->UpdatePreview();
+
+            if (mGrid->CanBuild())
+            {
+                mMainShader->setVec3("color", glm::vec3(0.0f, 0.0f, 1.0f));
+            }
+            else
+            {
+                mMainShader->setVec3("color", glm::vec3(1.0f, 0.0f, 0.0f));
+            }
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
