@@ -21,7 +21,8 @@ public :
 private :
 	Camera* mCamera;
 	std::vector<glm::vec3>* mCubesPositions;
-	glm::vec2 mGridChunk;
+	glm::vec3 mGridChunk;
+	float mBuildDistance = 6;
 	int mChunkSize = 1;
 	int mGridHeight = 0;
 	bool mIsOpen = false;

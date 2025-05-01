@@ -12,17 +12,16 @@ Grid::~Grid()
 
 void Grid::GetPointedGridChunk()
 {
-	float t = -(mCamera->Position.y / mCamera->Front.y);
+	float x = mCamera->Position.x + mCamera->Front.x * mBuildDistance;
+	float y = mCamera->Position.y + mCamera->Front.y * mBuildDistance;
+	float z = mCamera->Position.z + mCamera->Front.z * mBuildDistance;
 
-	float x = mCamera->Position.x + mCamera->Front.x * t;
-	float z = mCamera->Position.z + mCamera->Front.z * t;
-
-	mGridChunk = glm::vec2((int)(x / mChunkSize), (int)(z / mChunkSize));
+	mGridChunk = glm::vec3((int)(x / mChunkSize), (int)(y / mChunkSize), (int)(z / mChunkSize));
 }
 
 void Grid::UpdatePreview()
 {
-	(*mCubesPositions)[mCubesPositions->size() - 1] = glm::vec3(mGridChunk.x + mChunkSize / 2, 0, mGridChunk.y + mChunkSize / 2);
+	(*mCubesPositions)[mCubesPositions->size() - 1] = glm::vec3(mGridChunk.x + mChunkSize / 2, mGridChunk.y + mChunkSize / 2, mGridChunk.z + mChunkSize / 2);
 
 	mCanBuild = true;
 	for (int i = 0; i < mCubesPositions->size() - 1; i++)
